@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────
+ * Color tokens — RGB triplet 으로 정의해서 Tailwind opacity (예: bg-primary/40) 와 호환.
+ * tailwind.config.js 의 colors 가 rgb(var(--color-X) / <alpha-value>) 로 참조.
+ * 절대 토큰은 CLAUDE.md §4 룰 — Light 모드만 그대로. Dark 모드는 별도 ramp.
+ * ──────────────────────────────────────────────────────────────*/
+:root {
+  /* Primary forest green */
+  --color-primary-50: 232 245 233;     /* #E8F5E9 */
+  --color-primary-100: 200 230 201;    /* #C8E6C9 */
+  --color-primary-200: 165 214 167;    /* #A5D6A7 */
+  --color-primary-300: 129 199 132;    /* #81C784 */
+  --color-primary-500: 46 125 50;      /* #2E7D32 — 절대 토큰 */
+  --color-primary-700: 27 94 32;       /* #1B5E20 */
+
+  --color-secondary: 129 199 132;      /* #81C784 — 절대 토큰 */
+
+  --color-accent-100: 251 233 167;     /* #FBE9A7 */
+  --color-accent-500: 242 201 76;      /* #F2C94C — 절대 토큰 */
+
+  --color-background: 240 233 214;     /* #F0E9D6 — 절대 토큰 (warm cream) */
+  --color-surface: 255 255 255;        /* #FFFFFF */
+  --color-muted: 229 220 194;          /* #E5DCC2 */
+
+  --color-foreground: 31 42 68;        /* #1F2A44 — 절대 토큰 (navy) */
+  --color-fg-muted: 90 99 120;         /* #5A6378 */
+  --color-fg-faint: 141 148 164;       /* #8D94A4 */
+
+  --color-border: 217 205 176;         /* #D9CDB0 */
+  --color-border-strong: 191 179 149;  /* #BFB395 */
+
+  --color-success: 22 163 74;          /* #16A34A */
+  --color-warn: 217 119 6;              /* #D97706 */
+  --color-error: 180 83 9;              /* #B45309 */
+}
+
+/* ─── Dark mode — long-form 가독성 최적화 (DesignGuide §12) ─── */
+.theme-dark {
+  --color-primary-50: 31 45 32;        /* very dark green tint */
+  --color-primary-100: 42 61 44;
+  --color-primary-200: 65 90 67;
+  --color-primary-300: 102 187 106;    /* light forest */
+  --color-primary-500: 102 187 106;    /* #66BB6A — Material green 400 */
+  --color-primary-700: 165 214 167;    /* lighter for hover (inverted) */
+
+  --color-secondary: 76 175 80;        /* #4CAF50 */
+
+  --color-accent-100: 61 49 25;        /* dark amber tint */
+  --color-accent-500: 230 184 60;      /* #E6B83C — muted gold */
+
+  --color-background: 26 24 20;        /* #1A1814 — warm dark */
+  --color-surface: 35 33 28;           /* #23211C — slight elevation */
+  --color-muted: 42 38 32;             /* #2A2620 — hover/skeleton */
+
+  --color-foreground: 232 229 221;     /* #E8E5DD — warm white */
+  --color-fg-muted: 168 163 155;       /* #A8A39B */
+  --color-fg-faint: 128 122 114;       /* #807A72 */
+
+  --color-border: 58 53 45;            /* #3A352D */
+  --color-border-strong: 90 83 71;     /* #5A5347 */
+
+  --color-success: 102 187 106;
+  --color-warn: 251 146 60;
+  --color-error: 248 113 113;
+}
+
+/* Korean pixel font for Minecraft Easter-egg theme — Galmuri */
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri@latest/dist/Galmuri11.woff2')
+    format('woff2');
+  font-display: swap;
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri@latest/dist/Galmuri11-Bold.woff2')
+    format('woff2');
+  font-display: swap;
+  font-weight: 700;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  .numeric {
+    font-feature-settings: 'tnum' 1;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Minecraft Pixel Theme (Easter egg)
+ *   - 활성화: <html class="theme-pixel"> (App에서 themeStore에 따라 토글)
+ *   - 영향 범위: 글로벌 글꼴 / 모서리 / 그림자 / 트랜지션
+ *   - default 모드는 영향 없음
+ * ──────────────────────────────────────────────────────────────*/
+
+.theme-pixel,
+.theme-pixel body {
+  font-family: 'Galmuri11', 'Pretendard', monospace !important;
+  -webkit-font-smoothing: none !important;
+  -moz-osx-font-smoothing: unset !important;
+  text-rendering: optimizeSpeed !important;
+  letter-spacing: 0 !important;
+  font-feature-settings: normal !important;
+}
+
+/* 모든 둥근 모서리 제거 */
+.theme-pixel * {
+  border-radius: 0 !important;
+}
+
+/* numeric tabular-nums는 픽셀 폰트엔 영향 적지만 설정 보존 */
+.theme-pixel .numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Soft shadow → 하드 픽셀 오프셋 그림자 */
+.theme-pixel .shadow-soft {
+  box-shadow: 0 4px 0 0 rgba(31, 42, 68, 0.15) !important;
+}
+.theme-pixel .shadow-lift {
+  box-shadow: 0 6px 0 0 rgba(31, 42, 68, 0.25) !important;
+}
+
+/* 백드롭 블러 비활성 (픽셀 톤과 충돌) */
+.theme-pixel [class*='backdrop-blur'],
+.theme-pixel header,
+.theme-pixel nav {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 트랜지션을 step 함수로 — 부드러운 보간 → 픽셀 스냅 */
+.theme-pixel *,
+.theme-pixel *::before,
+.theme-pixel *::after {
+  transition-timing-function: steps(3, end) !important;
+}
+
+/* 버튼: 3D 블록 효과 (Minecraft 버튼 풍) */
+.theme-pixel button {
+  border-style: solid !important;
+  border-color: rgba(31, 42, 68, 0.18) !important;
+  border-width: 2px 2px 4px 2px !important;
+}
+.theme-pixel button:active:not(:disabled) {
+  border-bottom-width: 2px !important;
+  margin-top: 2px !important;
+}
+
+/* 페이지 진입 잎사귀 모션도 step 으로 */
+.theme-pixel .animate-leaf,
+.theme-pixel .animate-stage-transition,
+.theme-pixel .animate-stage-transition-lg,
+.theme-pixel .animate-fade-in,
+.theme-pixel .animate-countup {
+  animation-timing-function: steps(4, end) !important;
+}
+
+/* GrowthGauge / ProgressBar 채움도 step */
+.theme-pixel .ease-out {
+  transition-timing-function: steps(8, end) !important;
+}
+
+/* Topbar / BottomNav: 하드 라인 강조 */
+.theme-pixel header[class*='border-b'] {
+  border-bottom-width: 3px !important;
+  border-bottom-color: #1f2a44 !important;
+}
+.theme-pixel nav[class*='border-t'] {
+  border-top-width: 3px !important;
+  border-top-color: #1f2a44 !important;
+}
+.theme-pixel aside[class*='border-r'] {
+  border-right-width: 3px !important;
+  border-right-color: #1f2a44 !important;
+}
+
+/* 본문 살짝 grass diorama 느낌 — 하단 옅은 grass tint */
+.theme-pixel main {
+  background-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 92%,
+    rgba(125, 192, 90, 0.18) 100%
+  );
+}
