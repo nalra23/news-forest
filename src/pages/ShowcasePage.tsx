@@ -280,6 +280,68 @@ export function ShowcasePage() {
         </div>
       </section>
 
+      {/* ── Share / Social ───────────────────────────────── */}
+      <section className="bg-black px-5 py-28">
+        <div className="mx-auto max-w-[980px]">
+          <p
+            style={{ fontSize: 17, letterSpacing: '-0.32px' }}
+            className="mb-3 text-center text-[#86868b]"
+          >
+            함께 자라는 숲
+          </p>
+          <h2
+            style={{ fontSize: 'clamp(28px, 4.5vw, 44px)', fontWeight: 600, lineHeight: 1.05, letterSpacing: '-0.13px' }}
+            className="mb-5 text-center text-white"
+          >
+            내 숲을 주변과 나눠요.
+          </h2>
+          <p
+            style={{ fontSize: 20, fontWeight: 400, lineHeight: 1.25, letterSpacing: '-0.2px' }}
+            className="mb-14 text-center text-[#86868b]"
+          >
+            링크 하나로 내 독서 숲을 공유하고,
+            <br />
+            친구의 나무에 물도 줄 수 있어요.
+          </p>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                emoji: '🔗',
+                title: '숲 공유',
+                body: '내 숲 링크를 카카오톡·인스타그램 어디든 공유할 수 있어요.',
+              },
+              {
+                emoji: '💧',
+                title: '물주기',
+                body: '친구 숲에 방문해 나무에 물을 주면 +2P를 보너스로 드려요.',
+              },
+              {
+                emoji: '🏆',
+                title: '랭킹',
+                body: '얼마나 많이 읽었는지 랭킹으로 확인하고 비교해봐요.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-[28px] bg-[#1d1d1f] p-8">
+                <div className="mb-5 text-4xl">{item.emoji}</div>
+                <h3
+                  style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.17, letterSpacing: '-0.14px' }}
+                  className="mb-3 text-white"
+                >
+                  {item.title}
+                </h3>
+                <p
+                  style={{ fontSize: 17, lineHeight: 1.47, letterSpacing: '-0.32px' }}
+                  className="text-[#86868b]"
+                >
+                  {item.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Final CTA ────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-black px-5 py-36 text-center">
         <div
