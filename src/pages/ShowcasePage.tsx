@@ -2,115 +2,194 @@ import { Link } from 'react-router-dom'
 import { TreeArt } from '@/components/tree'
 import { type TreeStage } from '@/lib/tree'
 
-const GROWTH_STAGES: { stage: TreeStage; label: string; range: string; desc: string }[] = [
-  { stage: 'SEED',   label: '씨앗',  range: '0 – 29P',   desc: '첫 기사를 읽으면 씨앗이 심어져요' },
-  { stage: 'SPROUT', label: '새싹',  range: '30 – 99P',  desc: '꾸준히 읽으면 새싹이 돋아요' },
-  { stage: 'TREE',   label: '나무',  range: '100 – 299P', desc: '습관이 되면 나무로 자라요' },
-  { stage: 'FOREST', label: '숲',    range: '300P +',     desc: '진정한 독자는 숲을 이뤄요' },
+/* ── Apple / DESIGN.md 토큰 ─────────────────────────────────────
+   SF Pro → Inter fallback
+   Colors: Pitch Black #000000, Space Gray #1d1d1f, Cloud White #ffffff,
+           Ghost White #f5f5f7, Cool Gray #86868b, Deep Graphite #161617,
+           Interactive Blue #0071e3, Vivid Blue #2997ff, Highlight Blue #0066cc
+──────────────────────────────────────────────────────────────── */
+
+const STAGES: { stage: TreeStage; label: string; range: string; desc: string }[] = [
+  { stage: 'SEED',   label: '씨앗',  range: '0 – 29P',    desc: '첫 기사 한 편을 완독하면\n씨앗이 심어져요' },
+  { stage: 'SPROUT', label: '새싹',  range: '30 – 99P',   desc: '꾸준히 읽다 보면\n새싹이 돋아나요' },
+  { stage: 'TREE',   label: '나무',  range: '100 – 299P', desc: '습관이 쌓이면\n나무로 성장해요' },
+  { stage: 'FOREST', label: '숲',    range: '300P +',      desc: '진정한 독자만이\n숲을 이뤄요' },
 ]
 
 const STATS = [
-  { value: '90%',   label: '스크롤 완독 기준' },
-  { value: '30초',  label: '최소 체류 시간' },
-  { value: '+10P',  label: '완독 1편당 포인트' },
-  { value: '+2P',   label: '물주기 보너스' },
+  { value: '90%',  label: '완독 스크롤 기준' },
+  { value: '30s',  label: '완독 체류 시간' },
+  { value: '+10P', label: '완독 1편당 포인트' },
+  { value: '+2P',  label: '물주기 보너스' },
 ]
 
-const HOW = [
-  {
-    num: '01',
-    title: '읽어요',
-    desc: '광고 없이, 내가 고른 기사를 차분하게 읽어요.',
-  },
-  {
-    num: '02',
-    title: '검증해요',
-    desc: '90% 스크롤 + 30초 머무르면 완독으로 인정해요.',
-  },
-  {
-    num: '03',
-    title: '자라나요',
-    desc: '한 편마다 +10P. 씨앗에서 시작해 숲을 이뤄요.',
-  },
-]
+/* Apple SF Pro 대체 폰트 스택 */
+const SF = `'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
 
 export function ShowcasePage() {
   return (
-    <div
-      style={{ fontFamily: "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif" }}
-      className="min-h-dvh bg-black text-white"
-    >
-      {/* ── Nav ── */}
-      <nav className="fixed top-0 z-50 w-full bg-black/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-[980px] items-center justify-between px-6 py-3">
-          <span className="text-sm font-semibold tracking-tight text-white/90">
+    <div style={{ fontFamily: SF }} className="min-h-dvh bg-black text-white antialiased">
+
+      {/* ── Sticky Nav ───────────────────────────────────── */}
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.08] bg-[#000]/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[980px] items-center justify-between px-5 py-3">
+          <span
+            style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.32px' }}
+            className="text-white/90"
+          >
             News Forest
           </span>
+          <nav className="hidden items-center gap-7 md:flex">
+            {['특징', '성장 단계', '숫자로 보기'].map((t) => (
+              <button
+                key={t}
+                style={{ fontSize: 14, fontWeight: 400, letterSpacing: '-0.31px' }}
+                className="text-white/70 transition hover:text-white"
+              >
+                {t}
+              </button>
+            ))}
+          </nav>
           <Link
             to="/onboarding/welcome"
-            className="rounded-full bg-[#0071e3] px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-[#0077ed]"
+            style={{ fontSize: 14, fontWeight: 600, letterSpacing: '-0.31px' }}
+            className="rounded-full bg-[#0071e3] px-[18px] py-[8px] text-white transition hover:bg-[#0077ed] active:scale-95"
           >
             시작하기
           </Link>
         </div>
-      </nav>
+      </header>
 
-      {/* ── Hero ── */}
-      <section className="flex min-h-dvh flex-col items-center justify-center px-6 text-center">
-        <p className="mb-4 text-[17px] font-normal tracking-[-0.32px] text-[#86868b]">
-          뉴스 × 게이미피케이션
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <section className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-black px-5 text-center">
+        {/* subtle radial glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(41,151,255,0.12) 0%, transparent 70%)',
+          }}
+        />
+
+        <p
+          style={{ fontSize: 17, fontWeight: 400, letterSpacing: '-0.32px' }}
+          className="mb-5 text-[#86868b]"
+        >
+          게이미피케이션 기반 뉴스 플랫폼
         </p>
+
         <h1
-          className="mx-auto max-w-3xl text-[56px] font-semibold leading-[1.07] tracking-[-0.73px] text-white md:text-[80px] md:leading-[1.05] md:tracking-[-0.45px]"
+          style={{
+            fontSize: 'clamp(44px, 8vw, 80px)',
+            fontWeight: 600,
+            lineHeight: 1.05,
+            letterSpacing: 'clamp(-0.13px, -0.56vw, -0.45px)',
+          }}
+          className="mx-auto max-w-[820px] text-white"
         >
           뉴스를 읽으면,
           <br />
           숲이 자란다.
         </h1>
-        <p className="mt-6 max-w-md text-[20px] font-normal leading-[1.25] tracking-[-0.2px] text-[#86868b]">
+
+        <p
+          style={{ fontSize: 20, fontWeight: 400, lineHeight: 1.25, letterSpacing: '-0.2px' }}
+          className="mx-auto mt-6 max-w-[480px] text-[#86868b]"
+        >
           광고 없이, 부담 없이.
           <br />
           한 편마다 나무 한 그루가 자라요.
         </p>
-        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row">
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/onboarding/welcome"
-            className="rounded-full bg-[#0071e3] px-8 py-3 text-[17px] font-semibold tracking-[-0.32px] text-white transition hover:bg-[#0077ed]"
+            style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.32px' }}
+            className="rounded-full bg-[#0071e3] px-8 py-3.5 text-white transition hover:bg-[#0077ed] active:scale-95"
           >
             지금 시작하기
           </Link>
           <Link
             to="/home"
-            className="rounded-full px-8 py-3 text-[17px] font-semibold tracking-[-0.32px] text-[#2997ff] transition hover:text-white"
+            style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.32px' }}
+            className="rounded-full px-8 py-3.5 text-[#2997ff] transition hover:text-white"
           >
-            둘러보기 →
+            둘러보기 ›
           </Link>
         </div>
-        <p className="mt-6 text-[12px] tracking-[-0.48px] text-[#424245]">
+
+        <p
+          style={{ fontSize: 12, letterSpacing: '-0.48px' }}
+          className="mt-7 text-[#424245]"
+        >
           로그인 없이 익명으로 사용해요
         </p>
+
+        {/* Hero tree graphic */}
+        <div className="mt-20 flex gap-6">
+          {(['SEED', 'SPROUT', 'TREE', 'FOREST'] as TreeStage[]).map((s, i) => (
+            <div
+              key={s}
+              className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1d1d1f] text-[#2997ff] opacity-0 animate-[fadeUp_0.6s_ease_forwards]"
+              style={{ animationDelay: `${0.1 + i * 0.12}s` }}
+            >
+              <TreeArt stage={s} className="h-9 w-9" />
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* ── How it works ── */}
-      <section className="px-6 py-24">
+      {/* ── Feature cards (How it works) ─────────────────── */}
+      <section className="bg-[#161617] px-5 py-28">
         <div className="mx-auto max-w-[980px]">
-          <h2 className="mb-16 text-center text-[44px] font-semibold leading-[1.05] tracking-[-0.13px] text-white">
+          <h2
+            style={{ fontSize: 'clamp(28px, 4.5vw, 44px)', fontWeight: 600, lineHeight: 1.05, letterSpacing: '-0.13px' }}
+            className="mb-3 text-center text-white"
+          >
             어떻게 동작하나요?
           </h2>
+          <p
+            style={{ fontSize: 20, fontWeight: 400, lineHeight: 1.25, letterSpacing: '-0.2px' }}
+            className="mb-14 text-center text-[#86868b]"
+          >
+            세 가지 단계, 아주 간단해요.
+          </p>
+
           <div className="grid gap-4 md:grid-cols-3">
-            {HOW.map((item) => (
+            {[
+              {
+                icon: '📖',
+                title: '읽어요',
+                body: '마음에 드는 기사를 차분히 읽어요. 광고도, 방해도 없이.',
+              },
+              {
+                icon: '✅',
+                title: '검증해요',
+                body: '90% 스크롤 + 30초 머무르면 완독으로 인정해요.',
+              },
+              {
+                icon: '🌱',
+                title: '자라나요',
+                body: '한 편마다 +10P. 씨앗 → 새싹 → 나무 → 숲으로 성장해요.',
+              },
+            ].map((item, i) => (
               <div
-                key={item.num}
+                key={i}
                 className="rounded-[28px] bg-[#1d1d1f] p-8"
               >
-                <p className="mb-4 text-[56px] font-semibold leading-none tracking-[-0.73px] text-[#424245]">
-                  {item.num}
-                </p>
-                <h3 className="mb-2 text-[24px] font-semibold leading-[1.17] tracking-[-0.14px] text-white">
+                <div className="mb-5 text-4xl">{item.icon}</div>
+                <h3
+                  style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.17, letterSpacing: '-0.14px' }}
+                  className="mb-3 text-white"
+                >
                   {item.title}
                 </h3>
-                <p className="text-[17px] leading-[1.29] tracking-[-0.32px] text-[#86868b]">
-                  {item.desc}
+                <p
+                  style={{ fontSize: 17, lineHeight: 1.47, letterSpacing: '-0.32px' }}
+                  className="text-[#86868b]"
+                >
+                  {item.body}
                 </p>
               </div>
             ))}
@@ -118,31 +197,47 @@ export function ShowcasePage() {
         </div>
       </section>
 
-      {/* ── Growth stages ── */}
-      <section className="bg-[#161617] px-6 py-24">
+      {/* ── Growth stages ────────────────────────────────── */}
+      <section className="bg-black px-5 py-28">
         <div className="mx-auto max-w-[980px]">
-          <p className="mb-3 text-center text-[17px] tracking-[-0.32px] text-[#86868b]">
+          <p
+            style={{ fontSize: 17, letterSpacing: '-0.32px' }}
+            className="mb-3 text-center text-[#86868b]"
+          >
             나무 성장 단계
           </p>
-          <h2 className="mb-16 text-center text-[44px] font-semibold leading-[1.05] tracking-[-0.13px] text-white">
+          <h2
+            style={{ fontSize: 'clamp(28px, 4.5vw, 44px)', fontWeight: 600, lineHeight: 1.05, letterSpacing: '-0.13px' }}
+            className="mb-14 text-center text-white"
+          >
             씨앗에서 숲까지
           </h2>
+
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-            {GROWTH_STAGES.map(({ stage, label, range, desc }) => (
+            {STAGES.map(({ stage, label, range, desc }) => (
               <div
                 key={stage}
-                className="flex flex-col items-center rounded-[28px] bg-[#1d1d1f] px-6 py-10 text-center"
+                className="group flex flex-col items-center rounded-[28px] bg-[#1d1d1f] px-6 py-10 text-center transition hover:bg-[#333336]"
               >
-                <div className="mb-6 h-20 w-20 text-[#2997ff]">
+                <div className="mb-6 h-20 w-20 text-[#2997ff] transition group-hover:scale-105">
                   <TreeArt stage={stage} className="h-full w-full" title={label} />
                 </div>
-                <p className="mb-1 text-[24px] font-semibold tracking-[-0.14px] text-white">
+                <p
+                  style={{ fontSize: 24, fontWeight: 600, letterSpacing: '-0.14px' }}
+                  className="mb-1 text-white"
+                >
                   {label}
                 </p>
-                <p className="mb-3 text-[14px] tracking-[-0.31px] text-[#0066cc]">
+                <p
+                  style={{ fontSize: 14, letterSpacing: '-0.31px' }}
+                  className="mb-4 text-[#0066cc]"
+                >
                   {range}
                 </p>
-                <p className="text-[14px] leading-[1.43] tracking-[-0.31px] text-[#86868b]">
+                <p
+                  style={{ fontSize: 14, lineHeight: 1.5, letterSpacing: '-0.31px', whiteSpace: 'pre-line' }}
+                  className="text-[#86868b]"
+                >
                   {desc}
                 </p>
               </div>
@@ -151,22 +246,32 @@ export function ShowcasePage() {
         </div>
       </section>
 
-      {/* ── Stats ── */}
-      <section className="px-6 py-24">
+      {/* ── Stats ────────────────────────────────────────── */}
+      <section className="bg-[#161617] px-5 py-28">
         <div className="mx-auto max-w-[980px]">
-          <h2 className="mb-16 text-center text-[44px] font-semibold leading-[1.05] tracking-[-0.13px] text-white">
+          <h2
+            style={{ fontSize: 'clamp(28px, 4.5vw, 44px)', fontWeight: 600, lineHeight: 1.05, letterSpacing: '-0.13px' }}
+            className="mb-14 text-center text-white"
+          >
             숫자로 보는 뉴스 포레스트
           </h2>
+
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {STATS.map((s) => (
               <div
                 key={s.label}
                 className="rounded-[28px] bg-[#1d1d1f] px-6 py-10 text-center"
               >
-                <p className="mb-2 text-[56px] font-semibold leading-none tracking-[-0.73px] text-[#2997ff]">
+                <p
+                  style={{ fontSize: 'clamp(36px, 5vw, 56px)', fontWeight: 600, lineHeight: 1, letterSpacing: '-0.73px' }}
+                  className="mb-3 text-[#2997ff]"
+                >
                   {s.value}
                 </p>
-                <p className="text-[14px] leading-[1.43] tracking-[-0.31px] text-[#86868b]">
+                <p
+                  style={{ fontSize: 14, lineHeight: 1.43, letterSpacing: '-0.31px' }}
+                  className="text-[#86868b]"
+                >
                   {s.label}
                 </p>
               </div>
@@ -175,29 +280,53 @@ export function ShowcasePage() {
         </div>
       </section>
 
-      {/* ── Final CTA ── */}
-      <section className="bg-[#161617] px-6 py-32 text-center">
-        <h2 className="mx-auto mb-4 max-w-2xl text-[56px] font-semibold leading-[1.07] tracking-[-0.73px] text-white">
+      {/* ── Final CTA ────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-black px-5 py-36 text-center">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 70% 60% at 50% 100%, rgba(41,151,255,0.1) 0%, transparent 70%)',
+          }}
+        />
+        <h2
+          style={{ fontSize: 'clamp(36px, 6vw, 56px)', fontWeight: 600, lineHeight: 1.07, letterSpacing: '-0.73px' }}
+          className="mx-auto mb-5 max-w-[600px] text-white"
+        >
           지금 첫 나무를
           <br />
           심어볼까요?
         </h2>
-        <p className="mb-10 text-[20px] tracking-[-0.2px] text-[#86868b]">
+        <p
+          style={{ fontSize: 20, fontWeight: 400, lineHeight: 1.25, letterSpacing: '-0.2px' }}
+          className="mb-10 text-[#86868b]"
+        >
           로그인 없이 익명으로, 지금 바로 시작해요.
         </p>
         <Link
           to="/onboarding/welcome"
-          className="inline-block rounded-full bg-[#0071e3] px-10 py-4 text-[17px] font-semibold tracking-[-0.32px] text-white transition hover:bg-[#0077ed]"
+          style={{ fontSize: 17, fontWeight: 600, letterSpacing: '-0.32px' }}
+          className="inline-block rounded-full bg-[#0071e3] px-10 py-4 text-white transition hover:bg-[#0077ed] active:scale-95"
         >
           시작하기
         </Link>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="border-t border-[#333336] px-6 py-8">
-        <div className="mx-auto max-w-[980px] flex flex-col items-center gap-2 text-center text-[12px] tracking-[-0.48px] text-[#424245]">
-          <p>© 2026 News Forest</p>
-          <Link to="/privacy" className="hover:text-[#86868b] transition">
+      {/* ── Footer ───────────────────────────────────────── */}
+      <footer className="border-t border-[#333336] bg-[#161617] px-5 py-10">
+        <div className="mx-auto max-w-[980px] flex flex-col items-center gap-3 text-center">
+          <p
+            style={{ fontSize: 12, letterSpacing: '-0.48px' }}
+            className="text-[#424245]"
+          >
+            © 2026 News Forest
+          </p>
+          <Link
+            to="/privacy"
+            style={{ fontSize: 12, letterSpacing: '-0.48px' }}
+            className="text-[#424245] transition hover:text-[#86868b]"
+          >
             개인정보처리방침
           </Link>
         </div>
