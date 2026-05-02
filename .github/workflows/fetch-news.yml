@@ -1,0 +1,31 @@
+name: Fetch News
+
+on:
+  schedule:
+    - cron: '0 21 * * *'  # 매일 오전 6시 KST (UTC+9)
+  workflow_dispatch:        # 수동 실행 버튼
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch news with AI summaries
+        run: npm run fetch-news:ai
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
