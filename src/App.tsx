@@ -25,6 +25,7 @@ import { PrivacyPage } from '@/pages/PrivacyPage'
 import { QuestsPage } from '@/pages/QuestsPage'
 import { RankingPage } from '@/pages/RankingPage'
 import { ComponentGallery } from '@/pages/dev/ComponentGallery'
+import { ShowcasePage } from '@/pages/ShowcasePage'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -87,6 +88,7 @@ function App() {
         </Route>
 
         {/* Dev (no layout) */}
+        <Route path="/showcase" element={<ShowcasePage />} />
         <Route path="/dev/gallery" element={<ComponentGallery />} />
 
         {/* 404 */}
